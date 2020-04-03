@@ -13,6 +13,18 @@ class Game {
    * Begins game by selecting a random phrase and displaying it to user
    */
   startGame() {
+    let keys = document.getElementById("qwerty").querySelectorAll("button");
+    keys.forEach(x => {
+      x.className = "key";
+      x.disabled = false;
+    });
+    let phrase = document.getElementById("phrase").firstElementChild.children;
+    Array.from(phrase).forEach(x => x.remove());
+    let hearts = document.getElementsByClassName("tries");
+    Array.from(hearts).forEach(
+      x => (x.firstElementChild.src = "images/liveHeart.png")
+    );
+
     document.getElementById("overlay").style.display = "none";
     this.activePhrase = this.getRandomPhrase();
     this.activePhrase.addPhraseToDisplay();
@@ -101,7 +113,6 @@ class Game {
       ${this.activePhrase.phrase}`;
     }
   }
-
   /**
    * Handles onscreen keyboard button clicks
    * @param (HTMLButtonElement) button - The clicked button element
