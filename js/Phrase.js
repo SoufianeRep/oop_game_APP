@@ -16,12 +16,12 @@ class Phrase {
       if (letter !== " ") {
         let key = document.createElement("li");
         key.textContent = letter;
-        key.className = `hide letter ${key.textContent}`;
+        key.setAttribute("class", `hide letter ${key.textContent}`);
         document.getElementById("phrase").firstElementChild.appendChild(key);
       } else {
         let space = document.createElement("li");
         space.textContent = ` `;
-        space.className = "space";
+        space.setAttribute("class", `space`);
         document.getElementById("phrase").firstElementChild.appendChild(space);
       }
     });
@@ -46,7 +46,7 @@ class Phrase {
       );
       //handles the problem if more than one pressed key is included in the active phrase
       Array.from(chosenLetter).forEach(x => {
-        x.className = "show";
+        x.setAttribute("class", "show");
       });
     }
   }

@@ -11,20 +11,25 @@ class Game {
 
   /**
    * Begins game by selecting a random phrase and displaying it to user
+   * also removes all the changes of its not the first session(keyboard, hears and phrase);
    */
   startGame() {
+    //resets all the keyboard keys to their original state original color and enabled
     let keys = document.getElementById("qwerty").querySelectorAll("button");
     keys.forEach(x => {
-      x.className = "key";
+      x.setAttribute("class", `key`);
       x.disabled = false;
     });
+    //removes all the li children of ul child of phrase div (active phrase)
     let phrase = document.getElementById("phrase").firstElementChild.children;
     Array.from(phrase).forEach(x => x.remove());
+    //resets all the hearts to their original state
     let hearts = document.getElementsByClassName("tries");
     Array.from(hearts).forEach(
       x => (x.firstElementChild.src = "images/liveHeart.png")
     );
-
+    //initias a new game by removing the overlay from diplay
+    //setting a new random phrase and adds it to display
     document.getElementById("overlay").style.display = "none";
     this.activePhrase = this.getRandomPhrase();
     this.activePhrase.addPhraseToDisplay();
@@ -120,11 +125,11 @@ class Game {
   handleInteraction(button) {
     if (this.activePhrase.checkLetter(button.textContent)) {
       this.activePhrase.showMatchedLetter(button.textContent);
-      button.className = "chosen";
+      button.setAttribute("class", `chosen`);
       button.disabled = true;
     } else {
       this.removeLife();
-      button.className = "wrong";
+      button.setAttribute("class", `wrong`);
       button.disabled = true;
     }
 
