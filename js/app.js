@@ -17,3 +17,15 @@ for (i = 0; i < keyBoard.length; i++) {
     game.handleInteraction(e.target);
   });
 }
+
+document.addEventListener("keydown", e => {
+  if (e.keyCode >= 65 && e.keyCode <= 90) {
+    for (let i = 0; i < keyBoard.length; i++) {
+      if (
+        keyBoard[i].textContent === String.fromCharCode(e.keyCode).toLowerCase()
+      ) {
+        game.handleInteraction(keyBoard[i]);
+      }
+    }
+  }
+});

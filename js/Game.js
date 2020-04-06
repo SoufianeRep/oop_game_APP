@@ -108,14 +108,14 @@ class Game {
       document.getElementById("overlay").className = "win";
       document.getElementById(
         "game-over-message"
-      ).textContent = `"${this.activePhrase.phrase}".
-      Congratulations you guessed it right`;
+      ).innerHTML = `<p>"${this.activePhrase.phrase}".</p>
+      <p>Congratulations you guessed it right</p>`;
     } else {
       document.getElementById("overlay").className = "lose";
       document.getElementById(
         "game-over-message"
-      ).textContent = `Too bad the correct phrase was :
-      ${this.activePhrase.phrase}`;
+      ).innerHTML = `<p>Too bad the correct phrase was :</p>
+      <p>${this.activePhrase.phrase}</p>`;
     }
   }
   /**

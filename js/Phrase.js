@@ -46,7 +46,7 @@ class Phrase {
       );
       //handles the problem if more than one pressed key is included in the active phrase
       Array.from(chosenLetter).forEach(x => {
-        x.setAttribute("class", "show");
+        x.setAttribute("class", `show`);
       });
     }
   }
