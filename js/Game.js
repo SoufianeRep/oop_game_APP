@@ -16,17 +16,17 @@ class Game {
   startGame() {
     //resets all the keyboard keys to their original state original color and enabled
     let keys = document.getElementById("qwerty").querySelectorAll("button");
-    keys.forEach(x => {
+    keys.forEach((x) => {
       x.setAttribute("class", `key`);
       x.disabled = false;
     });
     //removes all the li children of ul child of phrase div (active phrase)
     let phrase = document.getElementById("phrase").firstElementChild.children;
-    Array.from(phrase).forEach(x => x.remove());
+    Array.from(phrase).forEach((x) => x.remove());
     //resets all the hearts to their original state
     let hearts = document.getElementsByClassName("tries");
     Array.from(hearts).forEach(
-      x => (x.firstElementChild.src = "images/liveHeart.png")
+      (x) => (x.firstElementChild.src = "images/liveHeart.png")
     );
     //initias a new game by removing the overlay from diplay
     //setting a new random phrase and adds it to display
@@ -44,7 +44,7 @@ class Game {
       new Phrase("Thank you so much"),
       new Phrase("I am so sorry"),
       new Phrase("Could you repeat it please"),
-      new Phrase("Nice to meet youa"),
+      new Phrase("Nice to meet you"),
       new Phrase("Son of a Gun"),
       new Phrase("A Piece of Cake"),
       new Phrase("Jaws of Death"),
@@ -58,7 +58,7 @@ class Game {
       new Phrase("Talk the Talk"),
       new Phrase("Curiosity Killed The Cat"),
       new Phrase("Drawing a Blank"),
-      new Phrase("An Arm and a Leg")
+      new Phrase("An Arm and a Leg"),
     ];
   }
 
@@ -75,13 +75,13 @@ class Game {
    * @return {boolean} True if game has been won, false if game wasn't won
    */
   checkForWin() {
-    //check if all the letter have a className Show...
     const activePhraseLetters = Array.from(
       document.getElementById("phrase").firstElementChild.children
     );
+    //removes space nodes from the array and check that every element had "show" class
     return activePhraseLetters
-      .filter(x => x.className !== "space")
-      .every(x => x.className === "show");
+      .filter((x) => x.className !== `space`)
+      .every((x) => x.className === `show`);
   }
 
   /**
@@ -99,7 +99,7 @@ class Game {
     }
   }
   /**
-   * Displays game over message
+   * Displays game over message and removes keydown eventlistener
    * @param {boolean} gameWon - Whether or not the user won the game
    */
   gameOver(gameWon) {
@@ -108,14 +108,20 @@ class Game {
       document.getElementById("overlay").className = "win";
       document.getElementById(
         "game-over-message"
-      ).innerHTML = `<p>"${this.activePhrase.phrase}".</p>
+      ).innerHTML = `<p>"${this.activePhrase.phrase.toUpperCase()}"</p>
       <p>Congratulations you guessed it right</p>`;
+      //removes the keydown event listener after the game is won to prevent the key from behind the overlay
+      //delete this line to test
+      document.removeEventListener("keydown", this.keydownCallback);
     } else {
       document.getElementById("overlay").className = "lose";
       document.getElementById(
         "game-over-message"
       ).innerHTML = `<p>Too bad the correct phrase was :</p>
-      <p>${this.activePhrase.phrase}</p>`;
+      <p>"${this.activePhrase.phrase.toUpperCase()}</p>"`;
+      //removes the keydown event listener after the game is lost to prevent the key from behind the overlay
+      //delete this line to test
+      document.removeEventListener("keydown", this.keydownCallback);
     }
   }
   /**
@@ -123,18 +129,40 @@ class Game {
    * @param (HTMLButtonElement) button - The clicked button element
    */
   handleInteraction(button) {
-    if (this.activePhrase.checkLetter(button.textContent)) {
+    let correctButton = this.activePhrase.checkLetter(button.textContent); // boolean
+    if (correctButton) {
       this.activePhrase.showMatchedLetter(button.textContent);
-      button.setAttribute("class", `chosen`);
+      button.classList.add(`chosen`);
       button.disabled = true;
-    } else {
+      //else if the button is not correct and the button is not disabled already
+      //to handle the issue of the wrong button still clickable and removes lives if clicked
+    } else if (!correctButton && button.disabled === false) {
       this.removeLife();
-      button.setAttribute("class", `wrong`);
+      button.classList.add(`wrong`, `animated`, `bounceOut`);
       button.disabled = true;
     }
-
-    if (this.checkForWin()) {
-      this.gameOver(true);
+    //sets a timer before displaying the win/lose screen to give 2s
+    window.setTimeout(() => {
+      if (this.checkForWin()) {
+        this.gameOver(true);
+      }
+    }, 1500);
+  }
+  /**
+   * keydown callback funtion for keydown event listener
+   * to make it easier to to remove event once the game is over
+   * @param (event) - keydown event handler
+   */
+  keydownCallback(event) {
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
+      for (let i = 0; i < keyboard.length; i++) {
+        if (
+          keyboard[i].textContent ===
+          String.fromCharCode(event.keyCode).toLowerCase()
+        ) {
+          game.handleInteraction(keyboard[i]);
+        }
+      }
     }
   }
 }

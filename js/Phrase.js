@@ -32,7 +32,7 @@ class Phrase {
    * @param (string) letter - Letter to check
    */
   checkLetter(letter) {
-    return this.phrase.includes(letter) ? true : false;
+    return this.phrase.includes(letter);
   }
 
   /**
@@ -41,12 +41,18 @@ class Phrase {
    */
   showMatchedLetter(letter) {
     if (this.checkLetter(letter)) {
-      let chosenLetter = document.getElementsByClassName(
-        `hide letter ${letter}`
+      let chosenLetter = Array.from(
+        document.getElementsByClassName(`hide letter ${letter}`)
       );
       //handles the problem if more than one pressed key is included in the active phrase
-      Array.from(chosenLetter).forEach(x => {
+      chosenLetter.forEach(x => {
         x.setAttribute("class", `show`);
+        x.classList.add("animated", "tada");
+        //removes the "animated" and "tada" from class name not to messup Game.checkWin() methode
+        //go back to checkWin() in Game.js
+        x.addEventListener("animationend", e => {
+          e.target.classList.remove("animated", "tada");
+        });
       });
     }
   }
