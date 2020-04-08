@@ -118,7 +118,7 @@ class Game {
       document.getElementById(
         "game-over-message"
       ).innerHTML = `<p>Too bad the correct phrase was :</p>
-      <p>"${this.activePhrase.phrase.toUpperCase()}</p>"`;
+      <p>"${this.activePhrase.phrase.toUpperCase()}"</p>`;
       //removes the keydown event listener after the game is lost to prevent the key from behind the overlay
       //delete this line to test
       document.removeEventListener("keydown", this.keydownCallback);
