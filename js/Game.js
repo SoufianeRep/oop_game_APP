@@ -14,13 +14,12 @@ class Game {
    * also removes all the changes of its not the first session(keyboard, hears and phrase);
    */
   startGame() {
-    //resets all the keyboard keys to their original state original color and enable them back
+    //resets pointer event on keyboard displayed key
     let keys = document.getElementById("qwerty").querySelectorAll("button");
     keys.forEach((x) => {
-      x.setAttribute("class", "key");
-      x.disabled = false;
       x.style.pointerEvents = "auto";
     });
+
     //removes all the li children of ul child of phrase div (active phrase)
     let phrase = document.getElementById("phrase").firstElementChild.children;
     Array.from(phrase).forEach((x) => x.remove());
@@ -118,9 +117,13 @@ class Game {
       ).innerHTML = `<p>Too bad the correct phrase was :</p>
       <p>"${this.activePhrase.phrase.toUpperCase()}"</p>`;
     }
-    //
+    //resets all the keyboard keys to their original state original color and enable them back
     let keys = document.getElementById("qwerty").querySelectorAll("button");
-    keys.forEach((x) => (x.style.pointerEvents = "none"));
+    keys.forEach((x) => {
+      x.setAttribute("class", "key");
+      x.disabled = false;
+      x.style.pointerEvents = "none";
+    });
     //removes keydown functionality after the game is over to stop keys from getting pressed from behind the overlay
     document.removeEventListener("keydown", this.physicalKeyFunction);
   }
@@ -139,7 +142,7 @@ class Game {
         if (this.checkForWin()) {
           this.gameOver(true);
         }
-      }, 1500);
+      }, 500);
       //else if the button is not correct and the button is not disabled already
       //to handle the issue of the wrong button still clickable and removes lives if clicked
     } else if (!correctButton && button.disabled === false) {
@@ -147,11 +150,9 @@ class Game {
       button.classList.add(`wrong`, `animated`, `bounceOut`);
       button.disabled = true;
 
-      window.setTimeout(() => {
-        if (this.missed === 5) {
-          this.gameOver(false);
-        }
-      }, 1500);
+      if (this.missed === 5) {
+        this.gameOver(false);
+      }
     }
   }
   /**
