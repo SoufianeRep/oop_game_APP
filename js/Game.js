@@ -15,11 +15,11 @@ class Game {
    */
   startGame() {
     //resets all the keyboard keys to their original state original color and enabled
-    let keys = document.getElementById("qwerty").querySelectorAll("button");
-    keys.forEach((x) => {
-      x.setAttribute("class", `key`);
-      x.disabled = false;
-    });
+    // let keys = document.getElementById("qwerty").querySelectorAll("button");
+    // keys.forEach((x) => {
+    //   x.setAttribute("class", "key");
+    //   x.disabled = false;
+    // });
     //removes all the li children of ul child of phrase div (active phrase)
     let phrase = document.getElementById("phrase").firstElementChild.children;
     Array.from(phrase).forEach((x) => x.remove());
@@ -41,24 +41,24 @@ class Game {
    */
   createPhrases() {
     return [
-      new Phrase("Thank you so much"),
-      new Phrase("I am so sorry"),
-      new Phrase("Could you repeat it please"),
-      new Phrase("Nice to meet you"),
-      new Phrase("Son of a Gun"),
-      new Phrase("A Piece of Cake"),
-      new Phrase("Jaws of Death"),
-      new Phrase("Down To The Wire"),
-      new Phrase("Jumping the Gun"),
-      new Phrase("Hands Down"),
+      // new Phrase("Thank you so much"),
+      // new Phrase("I am so sorry"),
+      // new Phrase("Could you repeat it please"),
+      // new Phrase("Nice to meet you"),
+      // new Phrase("Son of a Gun"),
+      // new Phrase("A Piece of Cake"),
+      // new Phrase("Jaws of Death"),
+      // new Phrase("Down To The Wire"),
+      // new Phrase("Jumping the Gun"),
+      // new Phrase("Hands Down"),
       new Phrase("Yada Yada"),
-      new Phrase("Wild Goose Chase"),
-      new Phrase("Cut To The Chase"),
-      new Phrase("Beating Around the Bush"),
-      new Phrase("Talk the Talk"),
-      new Phrase("Curiosity Killed The Cat"),
-      new Phrase("Drawing a Blank"),
-      new Phrase("An Arm and a Leg"),
+      // new Phrase("Wild Goose Chase"),
+      // new Phrase("Cut To The Chase"),
+      // new Phrase("Beating Around the Bush"),
+      // new Phrase("Talk the Talk"),
+      // new Phrase("Curiosity Killed The Cat"),
+      // new Phrase("Drawing a Blank"),
+      // new Phrase("An Arm and a Leg"),
     ];
   }
 
@@ -86,17 +86,17 @@ class Game {
 
   /**
    * Increases the value of the missed property
-   * Removes a life from the scoreboard
-   * Checks if player has remaining lives and ends game if player is out
+   * Removes a life from the scoreboard and updates misses
    */
   removeLife() {
     let hearts = document.getElementsByClassName("tries");
-    if (this.missed < 4) {
+    if (this.missed < 5) {
       hearts[this.missed].firstElementChild.src = "images/lostHeart.png";
-      this.missed += 1;
-    } else {
-      this.gameOver();
+      this.missed++;
     }
+    // } else {
+    //   this.gameOver(false);
+    // }
   }
   /**
    * Displays game over message and removes keydown eventlistener
@@ -110,19 +110,21 @@ class Game {
         "game-over-message"
       ).innerHTML = `<p>"${this.activePhrase.phrase.toUpperCase()}"</p>
       <p>Congratulations you guessed it right</p>`;
-      //removes the keydown event listener after the game is won to prevent the key from behind the overlay
-      //delete this line to test
-      document.removeEventListener("keydown", this.keydownCallback);
     } else {
       document.getElementById("overlay").className = "lose";
       document.getElementById(
         "game-over-message"
       ).innerHTML = `<p>Too bad the correct phrase was :</p>
       <p>"${this.activePhrase.phrase.toUpperCase()}"</p>`;
-      //removes the keydown event listener after the game is lost to prevent the key from behind the overlay
-      //delete this line to test
-      document.removeEventListener("keydown", this.keydownCallback);
     }
+    //resets all the keyboard keys to their original state original color and enabled
+    //and calcles hover event to correct the effect on the last button clicked after gameover
+    let keys = document.getElementById("qwerty").querySelectorAll("button");
+    keys.forEach((x) => {
+      x.setAttribute("class", "key");
+      x.disabled = false;
+      x.style.pointerEvents = "none";
+    });
   }
   /**
    * Handles onscreen keyboard button clicks
@@ -134,35 +136,29 @@ class Game {
       this.activePhrase.showMatchedLetter(button.textContent);
       button.classList.add(`chosen`);
       button.disabled = true;
+
+      window.setTimeout(() => {
+        if (this.checkForWin()) {
+          this.gameOver(true);
+        }
+      }, 3000);
       //else if the button is not correct and the button is not disabled already
       //to handle the issue of the wrong button still clickable and removes lives if clicked
     } else if (!correctButton && button.disabled === false) {
       this.removeLife();
       button.classList.add(`wrong`, `animated`, `bounceOut`);
       button.disabled = true;
+
+      window.setTimeout(() => {
+        if (this.missed === 5) {
+          this.gameOver(false);
+        }
+      }, 2000);
     }
-    //sets a timer before displaying the win/lose screen to give 2s
-    window.setTimeout(() => {
-      if (this.checkForWin()) {
-        this.gameOver(true);
-      }
-    }, 1500);
   }
   /**
    * keydown callback funtion for keydown event listener
    * to make it easier to to remove event once the game is over
    * @param (event) - keydown event handler
    */
-  keydownCallback(event) {
-    if (event.keyCode >= 65 && event.keyCode <= 90) {
-      for (let i = 0; i < keyboard.length; i++) {
-        if (
-          keyboard[i].textContent ===
-          String.fromCharCode(event.keyCode).toLowerCase()
-        ) {
-          game.handleInteraction(keyboard[i]);
-        }
-      }
-    }
-  }
 }

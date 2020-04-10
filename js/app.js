@@ -9,28 +9,26 @@ let game;
 btn.addEventListener("click", () => {
   game = new Game();
   game.startGame();
+  console.log(game.activePhrase.phrase);
 
   for (i = 0; i < keyboard.length; i++) {
-    keyboard[i].addEventListener("click", (e) => {
+    keyboard[i].addEventListener("click", function keyboardClickCallBack(e) {
       game.handleInteraction(e.target);
     });
   }
-
-  document.addEventListener("keydown", game.keydownCallback);
+  document.addEventListener("keydown", function keyboardKeydownCallBack(e) {
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      for (let i = 0; i < keyboard.length; i++) {
+        if (
+          keyboard[i].textContent ===
+          String.fromCharCode(e.keyCode).toLowerCase()
+        ) {
+          game.handleInteraction(keyboard[i]);
+        }
+      }
+    }
+  });
 });
-
-// const keydownCallback = event => {
-//   if (event.keyCode >= 65 && event.keyCode <= 90) {
-//     for (let i = 0; i < keyBoard.length; i++) {
-//       if (
-//         keyBoard[i].textContent ===
-//         String.fromCharCode(event.keyCode).toLowerCase()
-//       ) {
-//         game.handleInteraction(keyBoard[i]);
-//       }
-//     }
-//   }
-// };
 
 // document.addEventListener("keydown", game.keydownCallback());
 
