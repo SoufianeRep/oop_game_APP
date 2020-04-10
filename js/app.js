@@ -16,6 +16,7 @@ btn.addEventListener("click", () => {
       game.handleInteraction(e.target);
     });
   }
+
   document.addEventListener("keydown", function keyboardKeydownCallBack(e) {
     if (e.keyCode >= 65 && e.keyCode <= 90) {
       for (let i = 0; i < keyboard.length; i++) {
@@ -29,9 +30,3 @@ btn.addEventListener("click", () => {
     }
   });
 });
-
-// document.addEventListener("keydown", game.keydownCallback());
-
-// if (game.checkForWin() === true || game.checkForWin() === false) {
-//   document.removeEventListener("keydown", keydownCallback);
-// }

@@ -118,7 +118,7 @@ class Game {
       <p>"${this.activePhrase.phrase.toUpperCase()}"</p>`;
     }
     //resets all the keyboard keys to their original state original color and enabled
-    //and calcles hover event to correct the effect on the last button clicked after gameover
+    //and cancels hover event to correct the effect on the last button clicked after gameover
     let keys = document.getElementById("qwerty").querySelectorAll("button");
     keys.forEach((x) => {
       x.setAttribute("class", "key");
@@ -141,7 +141,7 @@ class Game {
         if (this.checkForWin()) {
           this.gameOver(true);
         }
-      }, 3000);
+      }, 1500);
       //else if the button is not correct and the button is not disabled already
       //to handle the issue of the wrong button still clickable and removes lives if clicked
     } else if (!correctButton && button.disabled === false) {
@@ -153,7 +153,7 @@ class Game {
         if (this.missed === 5) {
           this.gameOver(false);
         }
-      }, 2000);
+      }, 1500);
     }
   }
   /**
