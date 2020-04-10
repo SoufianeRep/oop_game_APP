@@ -12,21 +12,10 @@ btn.addEventListener("click", () => {
   console.log(game.activePhrase.phrase);
 
   for (i = 0; i < keyboard.length; i++) {
-    keyboard[i].addEventListener("click", function keyboardClickCallBack(e) {
+    keyboard[i].addEventListener("click", (e) => {
       game.handleInteraction(e.target);
     });
   }
 
-  document.addEventListener("keydown", function keyboardKeydownCallBack(e) {
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-      for (let i = 0; i < keyboard.length; i++) {
-        if (
-          keyboard[i].textContent ===
-          String.fromCharCode(e.keyCode).toLowerCase()
-        ) {
-          game.handleInteraction(keyboard[i]);
-        }
-      }
-    }
-  });
+  document.addEventListener("keydown", game.physicalKeyFunction);
 });

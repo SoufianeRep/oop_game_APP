@@ -14,12 +14,13 @@ class Game {
    * also removes all the changes of its not the first session(keyboard, hears and phrase);
    */
   startGame() {
-    //resets all the keyboard keys to their original state original color and enabled
-    // let keys = document.getElementById("qwerty").querySelectorAll("button");
-    // keys.forEach((x) => {
-    //   x.setAttribute("class", "key");
-    //   x.disabled = false;
-    // });
+    //resets all the keyboard keys to their original state original color and enable them back
+    let keys = document.getElementById("qwerty").querySelectorAll("button");
+    keys.forEach((x) => {
+      x.setAttribute("class", "key");
+      x.disabled = false;
+      x.style.pointerEvents = "auto";
+    });
     //removes all the li children of ul child of phrase div (active phrase)
     let phrase = document.getElementById("phrase").firstElementChild.children;
     Array.from(phrase).forEach((x) => x.remove());
@@ -117,14 +118,11 @@ class Game {
       ).innerHTML = `<p>Too bad the correct phrase was :</p>
       <p>"${this.activePhrase.phrase.toUpperCase()}"</p>`;
     }
-    //resets all the keyboard keys to their original state original color and enabled
-    //and cancels hover event to correct the effect on the last button clicked after gameover
+    //
     let keys = document.getElementById("qwerty").querySelectorAll("button");
-    keys.forEach((x) => {
-      x.setAttribute("class", "key");
-      x.disabled = false;
-      x.style.pointerEvents = "none";
-    });
+    keys.forEach((x) => (x.style.pointerEvents = "none"));
+    //removes keydown functionality after the game is over to stop keys from getting pressed from behind the overlay
+    document.removeEventListener("keydown", this.physicalKeyFunction);
   }
   /**
    * Handles onscreen keyboard button clicks
@@ -161,4 +159,18 @@ class Game {
    * to make it easier to to remove event once the game is over
    * @param (event) - keydown event handler
    */
+
+  physicalKeyFunction(event) {
+    let keyboard = document.getElementsByClassName("key");
+    if (event.keyCode >= 65 && event.keyCode <= 90) {
+      for (let i = 0; i < keyboard.length; i++) {
+        if (
+          keyboard[i].textContent ===
+          String.fromCharCode(event.keyCode).toLowerCase()
+        ) {
+          game.handleInteraction(keyboard[i]);
+        }
+      }
+    }
+  }
 }
