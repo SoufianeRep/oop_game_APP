@@ -28,6 +28,7 @@ class Game {
     Array.from(hearts).forEach(
       (x) => (x.firstElementChild.src = "images/liveHeart.png")
     );
+
     //initias a new game by removing the overlay from diplay
     //setting a new random phrase and adds it to display
     document.getElementById("overlay").style.display = "none";
@@ -41,24 +42,24 @@ class Game {
    */
   createPhrases() {
     return [
-      // new Phrase("Thank you so much"),
-      // new Phrase("I am so sorry"),
-      // new Phrase("Could you repeat it please"),
-      // new Phrase("Nice to meet you"),
-      // new Phrase("Son of a Gun"),
-      // new Phrase("A Piece of Cake"),
-      // new Phrase("Jaws of Death"),
-      // new Phrase("Down To The Wire"),
-      // new Phrase("Jumping the Gun"),
-      // new Phrase("Hands Down"),
+      new Phrase("Thank you so much"),
+      new Phrase("I am so sorry"),
+      new Phrase("Could you repeat it please"),
+      new Phrase("Nice to meet you"),
+      new Phrase("Son of a Gun"),
+      new Phrase("A Piece of Cake"),
+      new Phrase("Jaws of Death"),
+      new Phrase("Down To The Wire"),
+      new Phrase("Jumping the Gun"),
+      new Phrase("Hands Down"),
       new Phrase("Yada Yada"),
-      // new Phrase("Wild Goose Chase"),
-      // new Phrase("Cut To The Chase"),
-      // new Phrase("Beating Around the Bush"),
-      // new Phrase("Talk the Talk"),
-      // new Phrase("Curiosity Killed The Cat"),
-      // new Phrase("Drawing a Blank"),
-      // new Phrase("An Arm and a Leg"),
+      new Phrase("Wild Goose Chase"),
+      new Phrase("Cut To The Chase"),
+      new Phrase("Beating Around the Bush"),
+      new Phrase("Talk the Talk"),
+      new Phrase("Curiosity Killed The Cat"),
+      new Phrase("Drawing a Blank"),
+      new Phrase("An Arm and a Leg"),
     ];
   }
 
@@ -137,12 +138,13 @@ class Game {
       this.activePhrase.showMatchedLetter(button.textContent);
       button.classList.add(`chosen`);
       button.disabled = true;
-
+      //timer to give time for the animations to end, and revert to roginal class names, then checkforwin
       window.setTimeout(() => {
         if (this.checkForWin()) {
           this.gameOver(true);
         }
-      }, 500);
+      }, 200);
+
       //else if the button is not correct and the button is not disabled already
       //to handle the issue of the wrong button still clickable and removes lives if clicked
     } else if (!correctButton && button.disabled === false) {
@@ -160,7 +162,6 @@ class Game {
    * to make it easier to to remove event once the game is over
    * @param (event) - keydown event handler
    */
-
   physicalKeyFunction(event) {
     let keyboard = document.getElementsByClassName("key");
     if (event.keyCode >= 65 && event.keyCode <= 90) {

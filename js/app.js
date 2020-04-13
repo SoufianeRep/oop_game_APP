@@ -9,7 +9,6 @@ let game;
 btn.addEventListener("click", () => {
   game = new Game();
   game.startGame();
-  console.log(game.activePhrase.phrase);
 
   for (i = 0; i < keyboard.length; i++) {
     keyboard[i].addEventListener("click", (e) => {
