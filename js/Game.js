@@ -138,7 +138,7 @@ class Game {
       this.activePhrase.showMatchedLetter(button.textContent);
       button.classList.add(`chosen`);
       button.disabled = true;
-      //timer to give time for the animations to end, and revert to roginal class names, then checkforwin
+      //timer to give time for the animations to end, and revert to the oginal class names, then checkforwin
       window.setTimeout(() => {
         if (this.checkForWin()) {
           this.gameOver(true);
